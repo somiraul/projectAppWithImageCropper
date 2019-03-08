@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+    <link rel="stylesheet" href="{{ asset('asset/css/cropper.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+    <img src="{{ asset('ImageCropper/emma.jpg') }}" id="TestImageForCropper">
+    <button id="submit" type="submit"> Save </button>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="{{ asset('asset/js/cropper.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ asset('asset/js/jquery-cropper.js') }}"></script>
+
+
+    <script>
+
+        $(document).ready(function () {
+            console.log('JQUERY Working Two');
+
+            var image = document.getElementById('TestImageForCropper');
+            var cropper = new Cropper(image, {
+                crop(event) {
+                    console.log('x = '+event.detail.x);
+                    console.log('y = '+event.detail.y);
+                    console.log('width = '+event.detail.width);
+                    console.log('height = '+event.detail.height);
+                    console.log('rotate = '+event.detail.rotate);
+                    console.log('scaleX = '+event.detail.scaleX);
+                    console.log('scaleY = '+event.detail.scaleY);
+                    aspectRatio = event.detail.width / event.detail.height;
+                },
+            });
+
+            //getting Image originalName
+            var croppedImageName = $("#TestImageForCropper").attr('src'); //getting image attribute including dir
+            var parsedCroppedImageName = croppedImageName.split("/"); //converting to array
+            console.log(parsedCroppedImageName[2]); //accessing original filename including original extension
+
+            $("#submit").click(function () {
+                cropper.getCroppedCanvas().toBlob((blob) => {
+                    var formData = new FormData();
+
+                    formData.append('croppedImage', blob, parsedCroppedImageName[2]);
+
+                    $.ajax("{{ path('ImageCropperSubmit') }}", {
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error() {
+                            console.log('Upload error');
+                        },
+                    });
+                });
+            });
+
+        });
+
+    </script>
+
+{% endblock %}

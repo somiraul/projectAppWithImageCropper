@@ -1,0 +1,34 @@
+index:
+    path: /
+    controller: App\Controller\WebsiteController::index
+
+register:
+    path: register
+    controller: App\Controller\WebsiteController::register
+
+profile:
+    path: profile
+    controller: App\Controller\WebsiteController::profile
+
+logout:
+    path: logout
+
+profile_add_project:
+    path: profile/addProject
+    controller: App\Controller\WebsiteController::addProjectView
+
+add_project:
+    path: addProject
+    controller: App\Controller\WebsiteController::addProject
+
+edit_project:
+    path: editProject/{taskId}
+    controller: App\Controller\WebsiteController::editProject
+
+ImageCropperTest:
+    path: ImageCropper
+    controller: App\Controller\WebsiteController::imageCropperView
+
+ImageCropperSubmit:
+    path : ImageCropperSubmit
+    controller: App\Controller\WebsiteController::imageCropperSubmit
